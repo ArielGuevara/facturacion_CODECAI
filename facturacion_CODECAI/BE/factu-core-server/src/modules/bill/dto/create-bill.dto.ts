@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsPositive, IsDateString, Matches } from "class-validator";
+import { IsNotEmpty, IsOptional, IsPositive, IsDateString, Matches, IsNumber } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateBillDto {
     @IsNotEmpty()
@@ -6,11 +7,13 @@ export class CreateBillDto {
     billNumber: string;
 
     @IsNotEmpty()
-    @IsDateString()
+    @Type(() => Date)
     date: Date;
 
+    @IsOptional()
+    @IsNumber()
     @IsPositive()
-    grandTotal: number;
+    grandTotal?: number;
 
     @IsNotEmpty()
     @IsPositive()

@@ -1,9 +1,26 @@
+import { IsString, IsNumber, IsInt, IsPositive, Min, IsOptional } from 'class-validator';
+
 export class CreateBillDetailDto {
-    id: number;
+    @IsString()
     name: string;
+
+    @IsInt()
+    @Min(1)
     amount: number;
+
+    @IsString()
     description: string;
+
+    @IsNumber()
+    @IsPositive()
     itemPrice: number;
-    totalItem: number;
+
+    @IsOptional()
+    @IsNumber()
+    @IsPositive()
+    totalItem?: number;
+
+    @IsInt()
+    @IsPositive()
     billId: number;
 }

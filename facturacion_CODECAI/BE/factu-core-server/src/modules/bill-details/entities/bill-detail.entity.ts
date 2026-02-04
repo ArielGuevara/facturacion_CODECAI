@@ -1,4 +1,4 @@
-import {Bill} from '../../bill/entities/bill.entity';
+import { Bill } from '../../bill/entities/bill.entity';
 
 export class BillDetail {
     id: number;
@@ -8,5 +8,5 @@ export class BillDetail {
     itemPrice: number;
     totalItem: number;
     billId: number;
-    bill: Bill;
+    bill?: Bill;
 }

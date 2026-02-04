@@ -23,6 +23,7 @@ model Shop {
   id          Int       @id @default(autoincrement())
   name        String
   address     String
+  //razonSocial String
   phoneNumber String
   country     String
   city        String
@@ -59,6 +60,7 @@ model User {
 model Bill {
   id         Int       @id @default(autoincrement())
   billNumber String
+  ///shopId   Int
   date       DateTime
   grandTotal Float
   userId  Int
