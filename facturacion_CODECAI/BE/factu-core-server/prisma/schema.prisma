@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id    Int      @id @default(autoincrement())
+  name String  // Administrador, Gerente, etc.
+  users User[]
+}
+
+model Shop {
+  id          Int       @id @default(autoincrement())
+  name        String
+  address     String
+  phoneNumber String
+  country     String
+  city        String
+  ruc         String    @unique
+  email       String    @unique
+  isActive    Boolean   @default(true)
+  users       UserShop[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("shops")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  email            String   @unique
+  password        String
+  roleId           Int
+  role             Role      @relation(fields: [roleId], references: [id])
+  firstName       String
+  lastName        String
+  documentType    String
+  documentNumber  String
+  phoneNumber     String
+  address         String
+  shops           UserShop[]
+  bills           Bill[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("users")
+}
+
+model Bill {
+  id         Int       @id @default(autoincrement())
+  billNumber String
+  date       DateTime
+  grandTotal Float
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
+  details   BillDetails[]
+}
+
+model BillDetails {
+  id         Int      @id @default(autoincrement())
+  name       String
+  amount     Int
+  description String
+  itemPrice  Float
+  totalItem  Float
+  billId  Int
+  bill    Bill  @relation(fields: [billId], references: [id])
+}
+
+// Tabla intermedia para la relación many-to-many entre User y Shop
+model UserShop {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  shopId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  assignedAt DateTime @default(now())
+
+  @@unique([userId, shopId])
+  @@map("user_shops")
+}
